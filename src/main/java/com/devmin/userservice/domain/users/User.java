@@ -28,13 +28,12 @@ public class User extends BaseTimeEntity {
     private String role;
 
     @Column(columnDefinition = "TEXT")
-    private String introduction;
+    private String refreshToken;
 
     @Builder
-    public User(String username, String password, String role, String introduction) {
+    public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.introduction = introduction;
     }
 }
