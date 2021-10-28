@@ -1,16 +1,18 @@
-package com.devmin.userservice.domain.users;
+package com.devmin.userservice.domain.user;
 
 import com.devmin.userservice.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@DynamicInsert
 public class User extends BaseTimeEntity {
 
     @Id
@@ -23,15 +25,16 @@ public class User extends BaseTimeEntity {
     @Column(length = 20, nullable = false)
     private String password;
 
-    @ColumnDefault("user")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("'USER'")
     @Column(nullable = false)
-    private String role;
+    private Role role;
 
     @Column(columnDefinition = "TEXT")
     private String refreshToken;
 
     @Builder
-    public User(String username, String password, String role) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
