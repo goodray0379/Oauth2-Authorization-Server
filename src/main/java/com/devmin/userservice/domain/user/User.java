@@ -22,11 +22,11 @@ public class User extends BaseTimeEntity {
     @Column(length = 12, nullable = false)
     private String username;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 100, nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
     @ColumnDefault("'USER'")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
