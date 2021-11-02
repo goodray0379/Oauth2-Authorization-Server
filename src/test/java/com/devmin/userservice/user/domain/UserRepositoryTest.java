@@ -4,14 +4,10 @@ import com.devmin.userservice.domain.user.Role;
 import com.devmin.userservice.domain.user.User;
 import com.devmin.userservice.domain.user.UserRepository;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,13 +22,8 @@ public class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
-
+    @Autowired
     PasswordEncoder passwordEncoder;
-
-    @Before
-    public void setUp() throws Exception {
-        passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
     @After
     public void cleanup() {
