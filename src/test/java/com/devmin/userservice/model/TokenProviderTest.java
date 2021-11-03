@@ -32,7 +32,8 @@ public class TokenProviderTest {
                 .compact();
 
         //then
+        System.out.println(">>>>>>> jwt=" + jwt);
         Pattern pattern = Pattern.compile("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)");
-        assertThat(jwt).containsPattern(pattern);
+        assertThat(jwt).as("패턴이 맞지 않습니다.").containsPattern(pattern);
     }
 }
