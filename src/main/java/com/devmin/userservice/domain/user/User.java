@@ -19,7 +19,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 12, nullable = false)
+    @Column(length = 12, nullable = false, unique=true)
     private String username;
 
     @Column(length = 100, nullable = false)
@@ -29,9 +29,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-
-    @Column(columnDefinition = "TEXT")
-    private String refreshToken;
 
     @Builder
     public User(String username, String password, Role role) {
