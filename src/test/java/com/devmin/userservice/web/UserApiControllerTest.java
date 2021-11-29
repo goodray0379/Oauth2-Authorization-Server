@@ -5,6 +5,7 @@ import com.devmin.userservice.domain.user.UserRepository;
 import com.devmin.userservice.service.user.UserService;
 import com.devmin.userservice.web.dto.UserLoginRequestDto;
 import com.devmin.userservice.web.dto.UserLoginResponseDto;
+import com.devmin.userservice.web.dto.UserSaveRequestDto;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +30,6 @@ public class UserApiControllerTest {
     private TestRestTemplate restTemplate;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     @After
     public void tearDown() throws Exception {
@@ -42,22 +41,23 @@ public class UserApiControllerTest {
         //given
         String username = "devmin";
         String password = "123123";
-        String encodePassword = passwordEncoder.encode(password);
 
-        userRepository.save(User.builder()
+        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
                 .username(username)
-                .password(encodePassword)
-                .build());
+                .password(password)
+                .build();
 
         UserLoginRequestDto userLoginRequestDto = UserLoginRequestDto.builder()
                 .username(username)
                 .password(password)
                 .build();
 
-        String url = "http://localhost:" + port + "/api/v1/users/login";
+        String saveUrl = "http://localhost:" + port + "/api/v1/users";
+        String loginUrl = "http://localhost:" + port + "/api/v1/users/login";
 
         //when
-        ResponseEntity<UserLoginResponseDto> responseEntity = restTemplate.postForEntity(url, userLoginRequestDto, UserLoginResponseDto.class);
+        restTemplate.postForLocation(saveUrl, userSaveRequestDto);
+        ResponseEntity<UserLoginResponseDto> responseEntity = restTemplate.postForEntity(loginUrl, userLoginRequestDto, UserLoginResponseDto.class);
 
         //then
         assertThat(responseEntity.getBody().getUsername()).isEqualTo(username);
