@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,6 +40,7 @@ public class UserApiControllerTest {
     @Test
     public void User_로그인한다() throws Exception {
         //given
+        Pattern pattern = Pattern.compile("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)");
         String username = "devmin";
         String password = "123123";
 
@@ -60,8 +62,10 @@ public class UserApiControllerTest {
         ResponseEntity<UserLoginResponseDto> responseEntity = restTemplate.postForEntity(loginUrl, userLoginRequestDto, UserLoginResponseDto.class);
 
         //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getId()).isGreaterThan(0L);
+
         assertThat(responseEntity.getBody().getUsername()).isEqualTo(username);
-        Pattern pattern = Pattern.compile("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)");
         assertThat(responseEntity.getBody().getAccessToken()).as("패턴이 맞지 않습니다.").containsPattern(pattern);
     }
 }

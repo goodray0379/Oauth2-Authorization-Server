@@ -1,26 +1,24 @@
 package com.devmin.userservice.service.user;
 
+import com.devmin.userservice.component.JwtUtil;
 import com.devmin.userservice.domain.user.User;
 import com.devmin.userservice.domain.user.UserRepository;
 import com.devmin.userservice.web.dto.UserLoginRequestDto;
 import com.devmin.userservice.web.dto.UserLoginResponseDto;
+import com.devmin.userservice.web.dto.UserResponseDto;
 import com.devmin.userservice.web.dto.UserSaveRequestDto;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    final static long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
-    final static String KEY = "c3ByaW5nLWJvb3Qtc2VjdXJpdHktand0LXR1dG9yaWFsLWppd29vbi1zcHJpbmctYm9vdC1zZWN1cml0eS1qd3QtdHV0b3JpYWwK";
+    private final JwtUtil jwtUtil;
 
     public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto){
         String username = userLoginRequestDto.getUsername();
@@ -33,25 +31,19 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
 
         //토큰 발급
-        String accessToken = makeToken(entity);
+        String accessToken = jwtUtil.createToken(entity);
         return new UserLoginResponseDto(entity, accessToken);
     }
 
-    public void save(UserSaveRequestDto userSaveRequestDto){
-        userSaveRequestDto.changePassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
-        userRepository.save( userSaveRequestDto.toEntity() );
+    public UserResponseDto findById(Long id){
+        User user =  userRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("해당 사용자가 없습니다. id=" + id));
+        return new UserResponseDto(user);
     }
 
-    public String makeToken(User user){
-        //토큰 발급
-        Date now = new Date();
-
-        return Jwts.builder()
-                .setIssuer("devmin")
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
-                .claim("id", user.getId())
-                .signWith(SignatureAlgorithm.HS512, KEY)
-                .compact();
+    @Transactional
+    public Long save(UserSaveRequestDto userSaveRequestDto){
+        userSaveRequestDto.changePassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
+        return userRepository.save( userSaveRequestDto.toEntity() ).getId();
     }
 }
