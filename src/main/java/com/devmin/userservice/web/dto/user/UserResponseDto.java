@@ -1,4 +1,4 @@
-package com.devmin.userservice.web.dto;
+package com.devmin.userservice.web.dto.user;
 
 import com.devmin.userservice.domain.user.Role;
 import com.devmin.userservice.domain.user.User;

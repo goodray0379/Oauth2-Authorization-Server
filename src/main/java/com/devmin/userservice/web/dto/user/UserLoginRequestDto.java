@@ -1,4 +1,4 @@
-package com.devmin.userservice.web.dto;
+package com.devmin.userservice.web.dto.user;
 
 import lombok.Builder;
 import lombok.Getter;

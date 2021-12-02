@@ -3,10 +3,10 @@ package com.devmin.userservice.service.user;
 import com.devmin.userservice.component.JwtUtil;
 import com.devmin.userservice.domain.user.User;
 import com.devmin.userservice.domain.user.UserRepository;
-import com.devmin.userservice.web.dto.UserLoginRequestDto;
-import com.devmin.userservice.web.dto.UserLoginResponseDto;
-import com.devmin.userservice.web.dto.UserResponseDto;
-import com.devmin.userservice.web.dto.UserSaveRequestDto;
+import com.devmin.userservice.web.dto.user.UserLoginRequestDto;
+import com.devmin.userservice.web.dto.user.UserLoginResponseDto;
+import com.devmin.userservice.web.dto.user.UserResponseDto;
+import com.devmin.userservice.web.dto.user.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,7 +43,7 @@ public class UserService {
 
     @Transactional
     public Long save(UserSaveRequestDto userSaveRequestDto){
-        userSaveRequestDto.changePassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
+        userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
         return userRepository.save( userSaveRequestDto.toEntity() ).getId();
     }
 }

@@ -1,10 +1,12 @@
-package com.devmin.userservice.web.dto;
+package com.devmin.userservice.web.dto.user;
 
 import com.devmin.userservice.domain.user.Role;
 import com.devmin.userservice.domain.user.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class UserLoginResponseDto {
     private Long id;
     private String username;
