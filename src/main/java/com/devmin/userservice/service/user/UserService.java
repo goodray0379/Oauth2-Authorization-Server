@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -31,8 +33,12 @@ public class UserService {
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
 
         //토큰 발급
-        String accessToken = jwtUtil.createToken(entity);
-        return new UserLoginResponseDto(entity, accessToken);
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("accessToken", jwtUtil.createAccessToken(entity));
+        tokens.put("refreshToken", jwtUtil.createRefreshToken(entity));
+
+        entity.updateRefreshToken(tokens.get("refreshToken"));
+        return new UserLoginResponseDto(entity, tokens);
     }
 
     public UserResponseDto findById(Long id){

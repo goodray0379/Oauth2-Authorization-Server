@@ -88,6 +88,7 @@ public class UserApiControllerTest {
         assertThat(responseEntity.getBody().getId()).isGreaterThan(0L);
 
         assertThat(responseEntity.getBody().getUsername()).isEqualTo(username);
-        assertThat(responseEntity.getBody().getAccessToken()).matches(pattern);
+        assertThat(responseEntity.getBody().getTokens().get("accessToken")).matches(pattern);
+        assertThat(responseEntity.getBody().getTokens().get("refreshToken")).matches(pattern);
     }
 }
