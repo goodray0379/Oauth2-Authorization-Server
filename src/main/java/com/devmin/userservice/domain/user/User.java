@@ -13,13 +13,13 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @DynamicInsert
-public class User extends BaseTimeEntity {
+public class User<refreshToken> extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 12, nullable = false)
+    @Column(length = 12, nullable = false, unique=true)
     private String username;
 
     @Column(length = 100, nullable = false)
@@ -30,13 +30,19 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 100)
     private String refreshToken;
 
     @Builder
-    public User(String username, String password, Role role) {
+    public User(Long id, String username, String password, Role role, String refreshToken) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 }
