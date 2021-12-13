@@ -5,8 +5,9 @@
 `SpringBoot` `lombok` `JPA` `H2`
 
 ### Update History
-* 21-12-30 (v1.0)
-	* 전체 Flow 반영된 초기버전 완성(예정)
+
+##### v1.0 [2021-12-31]
+###### - 전체 Flow 반영된 초기버전 완성(예정)
 
 <br>
 
@@ -20,7 +21,9 @@
 
 <br>
 
-## Project Flows
+## Project
+
+### Flows
 
 1. 사용자가 client에 접속합니다.
 
