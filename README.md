@@ -4,23 +4,23 @@
 
 `SpringBoot` `lombok` `JPA` `H2`
 
-### Update
-* 20. 12. 30
-	* v 1.0: 프로젝트 완성(예정)
+### Update History
+* 21-12-30 (v1.0)
+	* 전체 Flow 반영된 초기버전 완성(예정)
 
 <br>
 
-## Oauth2.0
+## What is Oauth2 ?
 🙋 작업 중
 
 <br>
 
-## JWT
+## What is JWT ?
 🙋 작업 중
 
 <br>
 
-## Flows
+## Project Flows
 
 1. 사용자가 client에 접속합니다.
 
