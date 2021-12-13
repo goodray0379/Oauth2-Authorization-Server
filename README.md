@@ -107,10 +107,6 @@
 
 9. client는 token을 통해 resource server에 직접 접근할 수 있게 됩니다.
 
-
-<br>
-<br>
-
 ### Database
 🙋 작업 중
 
