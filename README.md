@@ -1,33 +1,47 @@
-## Oauth2-Authorization-Server
+# Introduction
 
+### Oauth2-Authorization-Server
 > Authorization Code 방식의 Oauth2.0 API Server 가상 구현
 
 `SpringBoot` `lombok` `JPA` `H2`
 
-JWT 토큰 기반 구현
+<br>
 
-테스트를 위한 간단한 Resource Server API 포함
+- JWT 토큰 기반 구현
+- 테스트를 위한 간단한 Resource Server API 포함
+- 아쉽게도 프론트엔드 컴포넌트 X
+
+<br>
 
 ### Update History
 
-##### v1.0 [2022-01-31]
+#### v1.0 [2022-01-31]
 ###### - 전체 Flow 반영된 초기버전 완성(예정)
 
+<br>
 <br>
 
 ## What is Oauth2 ?
 🙋 작업 중
 
+
+<br>
 <br>
 
 ## What is JWT ?
 🙋 작업 중
 
+
+<br>
 <br>
 
 ## Project
 
+<br>
+
 ### Flows
+<img src="https://blogfiles.pstatic.net/MjAyMTEyMTNfMjQ4/MDAxNjM5MzYyMTg0Mzkz.Ap39zMdWNqsRN2RcSdEGkEvKYTw1sdJ3hmaR6B_kZ1Eg.aiBJ9ZwfBJ7tjl-oBIIQyCE-_H9F6gNWSDNMAYqYk3Eg.PNG.good_ray/Authorization_Code_Grant_Type.png" width="60%" height="60%" title="oauth2" alt="oauth2"></img>
+<br>
 
 1. 사용자가 client에 접속합니다.
 
@@ -93,11 +107,15 @@ JWT 토큰 기반 구현
 
 9. client는 token을 통해 resource server에 직접 접근할 수 있게 됩니다.
 
-<br>  
+
+<br>
+<br>
 
 ### Database
 🙋 작업 중
 
+
+<br>
 <br>
 
 ### End-points
