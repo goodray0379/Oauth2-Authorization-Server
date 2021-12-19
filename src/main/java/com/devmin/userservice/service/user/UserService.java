@@ -8,16 +8,21 @@ import com.devmin.userservice.web.dto.user.UserLoginResponseDto;
 import com.devmin.userservice.web.dto.user.UserResponseDto;
 import com.devmin.userservice.web.dto.user.UserSaveRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -47,9 +52,21 @@ public class UserService {
         return new UserResponseDto(user);
     }
 
+    public List<UserResponseDto> findAll(){
+        List<UserResponseDto> userResponseDtos = new ArrayList<>();
+        userRepository.findAll().forEach( user -> userResponseDtos.add( new UserResponseDto(user) ) );
+        return userResponseDtos;
+    }
+
     @Transactional
     public Long save(UserSaveRequestDto userSaveRequestDto){
         userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
         return userRepository.save( userSaveRequestDto.toEntity() ).getId();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 }
