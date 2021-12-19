@@ -10,22 +10,22 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/users")
 public class UserApiController {
 
     private final UserService userService;
 
-    @PostMapping("/users/login")
+    @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         return userService.login(userLoginRequestDto);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public UserResponseDto findById(@PathVariable Long id){
         return userService.findById(id);
     }
 
-    @PostMapping("/users")
+    @PostMapping("")
     public Long save(@RequestBody UserSaveRequestDto userSaveRequestDto) {
         return userService.save(userSaveRequestDto);
     }
