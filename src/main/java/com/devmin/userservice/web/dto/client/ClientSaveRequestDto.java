@@ -12,15 +12,15 @@ public class ClientSaveRequestDto {
 
     private String clientName;
     private String companyName;
-    private String url;
+    private String webUrl;
     private String callbackUrl;
     private String description;
 
     @Builder
-    public ClientSaveRequestDto(String clientName, String companyName, String url, String callbackUrl, String description) {
+    public ClientSaveRequestDto(String clientName, String companyName, String webUrl, String callbackUrl, String description) {
         this.clientName = clientName;
         this.companyName = companyName;
-        this.url = url;
+        this.webUrl = webUrl;
         this.callbackUrl = callbackUrl;
         this.description = description;
     }
@@ -29,7 +29,7 @@ public class ClientSaveRequestDto {
         return Client.builder()
                 .clientName(clientName)
                 .companyName(companyName)
-                .url(url)
+                .webUrl(webUrl)
                 .callbackUrl(callbackUrl)
                 .description(description)
                 .clientId(clientInfos.get("clientId"))

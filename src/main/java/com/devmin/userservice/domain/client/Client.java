@@ -31,7 +31,7 @@ public class Client extends BaseTimeEntity {
     private String companyName;
 
     @Column(length = 100, nullable = false)
-    private String url;
+    private String webUrl;
 
     @Column(length = 100, nullable = false)
     private String callbackUrl;
@@ -40,13 +40,13 @@ public class Client extends BaseTimeEntity {
     private String description;
 
     @Builder
-    public Client(Long id, String clientId, String clientSecret, String clientName, String companyName, String url, String callbackUrl, String description) {
+    public Client(Long id, String clientId, String clientSecret, String clientName, String companyName, String webUrl, String callbackUrl, String description) {
         this.id = id;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.clientName = clientName;
         this.companyName = companyName;
-        this.url = url;
+        this.webUrl = webUrl;
         this.callbackUrl = callbackUrl;
         this.description = description;
     }

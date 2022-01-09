@@ -13,7 +13,7 @@ public class ClientResponseDto {
     private String clientId;
     private String clientName;
     private String companyName;
-    private String url;
+    private String webUrl;
     private String callbackUrl;
     private String description;
 
@@ -22,7 +22,7 @@ public class ClientResponseDto {
         this.clientId = entity.getClientId();
         this.clientName = entity.getClientName();
         this.companyName = entity.getCompanyName();
-        this.url = entity.getUrl();
+        this.webUrl = entity.getWebUrl();
         this.callbackUrl = entity.getCallbackUrl();
         this.description = entity.getDescription();
     }
