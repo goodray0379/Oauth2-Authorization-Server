@@ -2,8 +2,11 @@ package com.devmin.userservice.filter;
 
 import com.devmin.userservice.component.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -17,6 +20,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -26,7 +30,8 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 유효한 토큰인지 확인합니다.
         if (jwt != null && jwtUtil.validateToken(jwt)) {
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
-            Authentication authentication = jwtUtil.getAuthentication(jwt);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUtil.getUsername(jwt));
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
             // SecurityContext 에 Authentication 객체를 저장합니다.
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

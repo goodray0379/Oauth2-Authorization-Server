@@ -23,8 +23,6 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final UserDetailsService userDetailsService;
-
     @Value("${jwt.secret-key}")
     private String key;
     @Value("${jwt.issuer}")
@@ -57,12 +55,6 @@ public class JwtUtil {
                 .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
-    }
-
-    // JWT 토큰에서 인증 정보 조회
-    public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     // 토큰에서 회원 정보 추출

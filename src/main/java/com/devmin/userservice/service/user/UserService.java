@@ -24,19 +24,9 @@ import java.util.Map;
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public UserLoginResponseDto login(UserLoginRequestDto userLoginRequestDto){
-        String username = userLoginRequestDto.getUsername();
-        String password = userLoginRequestDto.getPassword();
-
-        //계정 확인
-        User entity = userRepository.findByUsername(username)
-                .orElseThrow(()-> new IllegalArgumentException("해당 ID가 없습니다. ID=" + username));
-        if(!passwordEncoder.matches(password, entity.getPassword()))
-            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-
+    public UserLoginResponseDto login(User entity){
         //토큰 발급
         Map<String, String> tokens = new HashMap<>();
         tokens.put("accessToken", jwtUtil.createAccessToken(entity));
@@ -52,6 +42,12 @@ public class UserService implements UserDetailsService {
         return new UserResponseDto(user);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
     public List<UserResponseDto> findAll(){
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
         userRepository.findAll().forEach( user -> userResponseDtos.add( new UserResponseDto(user) ) );
@@ -60,13 +56,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public Long save(UserSaveRequestDto userSaveRequestDto){
-        userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
         return userRepository.save( userSaveRequestDto.toEntity() ).getId();
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 }
