@@ -29,7 +29,8 @@ public class UserApiController {
                 .orElseThrow(()-> new IllegalArgumentException("해당 ID가 없습니다. ID=" + username));
         if(!passwordEncoder.matches(password, entity.getPassword()))
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-        return userService.login(entity);
+        //After To Do: 클라이언트 정보 확인 로직 추가해야함
+        return userService.createAuthorizationCode(entity, userLoginRequestDto);
     }
 
     @GetMapping("/{id}")
