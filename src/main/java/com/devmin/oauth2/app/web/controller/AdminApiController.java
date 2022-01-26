@@ -1,4 +1,4 @@
-package com.devmin.oauth2.app.web;
+package com.devmin.oauth2.app.web.controller;
 
 import com.devmin.oauth2.app.service.user.UserService;
 import com.devmin.oauth2.app.web.dto.user.UserResponseDto;

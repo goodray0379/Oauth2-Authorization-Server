@@ -1,4 +1,4 @@
-package com.devmin.oauth2.app.web;
+package com.devmin.oauth2.app.web.controller.user;
 
 import com.devmin.oauth2.app.domain.user.User;
 import com.devmin.oauth2.app.domain.user.UserRepository;
@@ -20,6 +20,11 @@ public class UserApiController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /*
+     * 로그인
+     * @return 토큰값
+     * @author devmin
+     */
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
         //계정 확인
@@ -29,15 +34,24 @@ public class UserApiController {
                 .orElseThrow(()-> new IllegalArgumentException("해당 ID가 없습니다. ID=" + username));
         if(!passwordEncoder.matches(password, entity.getPassword()))
             throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-        //After To Do: 클라이언트 정보 확인 로직 추가해야함
-        return userService.createAuthorizationCode(entity, userLoginRequestDto);
+        return userService.login(entity);
     }
 
+    /*
+     * 회원정보 조회
+     * @return 유저정보
+     * @author devmin
+     */
     @GetMapping("/{id}")
     public UserResponseDto findById(@PathVariable Long id){
         return userService.findById(id);
     }
 
+    /*
+     * 회원정보 저장
+     * @return 유저아이디
+     * @author devmin
+     */
     @PostMapping("")
     public Long save(@RequestBody UserSaveRequestDto userSaveRequestDto) {
         userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));

@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserLoginResponseDto {
-    private String authorizationCode;
-    private String state;
+    private String accessToken;
+    private String refreshToken;
 
-    public UserLoginResponseDto(String authorizationCode, String state) {
-        this.authorizationCode = authorizationCode;
-        this.state = state;
+    public UserLoginResponseDto(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }

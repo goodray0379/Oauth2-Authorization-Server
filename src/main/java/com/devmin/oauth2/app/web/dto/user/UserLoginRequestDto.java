@@ -9,18 +9,10 @@ import lombok.NoArgsConstructor;
 public class UserLoginRequestDto {
     private String username;
     private String password;
-    private String responseType;
-    private String redirectUrl;
-    private String clientId;
-    private String state;
 
     @Builder
-    public UserLoginRequestDto(String username, String password, String responseType, String redirectUrl, String clientId, String state) {
+    public UserLoginRequestDto(String username, String password) {
         this.username = username;
         this.password = password;
-        this.responseType = responseType;
-        this.redirectUrl = redirectUrl;
-        this.clientId = clientId;
-        this.state = state;
     }
 }

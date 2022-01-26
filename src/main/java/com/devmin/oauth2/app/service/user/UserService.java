@@ -2,7 +2,6 @@ package com.devmin.oauth2.app.service.user;
 
 import com.devmin.oauth2.app.domain.user.User;
 import com.devmin.oauth2.app.domain.user.UserRepository;
-import com.devmin.oauth2.app.web.dto.user.UserLoginRequestDto;
 import com.devmin.oauth2.app.web.dto.user.UserLoginResponseDto;
 import com.devmin.oauth2.app.web.dto.user.UserResponseDto;
 import com.devmin.oauth2.app.web.dto.user.UserSaveRequestDto;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -24,10 +22,8 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public UserLoginResponseDto createAuthorizationCode(User entity, UserLoginRequestDto userLoginRequestDto){
-        String authorizationCode = UUID.randomUUID().toString();
-        //After To Do: 인증코드 저장 로직 추가해야함
-        return new UserLoginResponseDto(authorizationCode, userLoginRequestDto.getState());
+    public UserLoginResponseDto login(User entity){
+        return new UserLoginResponseDto(jwtTokenProvider.createAccessToken(entity), jwtTokenProvider.createRefreshToken(entity));
     }
 
     public UserResponseDto findById(Long id){

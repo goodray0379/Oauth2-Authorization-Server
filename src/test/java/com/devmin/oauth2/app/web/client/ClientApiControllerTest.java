@@ -1,4 +1,4 @@
-package com.devmin.oauth2.app.web;
+package com.devmin.oauth2.app.web.client;
 
 import com.devmin.oauth2.app.domain.client.ClientRepository;
 import com.devmin.oauth2.app.service.client.ClientService;

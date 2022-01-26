@@ -1,4 +1,4 @@
-package com.devmin.oauth2.app.web;
+package com.devmin.oauth2.app.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

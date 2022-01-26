@@ -1,10 +1,11 @@
-package com.devmin.oauth2.app.web;
+package com.devmin.oauth2.app.web.user;
 
 import com.devmin.oauth2.app.domain.user.Role;
 import com.devmin.oauth2.app.domain.user.UserRepository;
 import com.devmin.oauth2.app.service.user.UserService;
 import com.devmin.oauth2.app.web.dto.user.UserLoginRequestDto;
 import com.devmin.oauth2.app.web.dto.user.UserLoginResponseDto;
+import com.devmin.oauth2.app.web.dto.user.UserResponseDto;
 import com.devmin.oauth2.app.web.dto.user.UserSaveRequestDto;
 import org.junit.After;
 import org.junit.Test;
@@ -42,28 +43,6 @@ public class UserApiControllerTest {
     }
 
     @Test
-    public void User_회원가입한다() throws Exception {
-        //given
-        String username = "devmin";
-        String password = "123123";
-        Role role = Role.ADMIN;
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
-                .username(username)
-                .password(password)
-                .role(role)
-                .build();
-
-        String url = "http://localhost:" + port + "/api/v1/users";
-
-        //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, userSaveRequestDto, Long.class);
-
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-    }
-
-    @Test
     public void User_로그인한다() throws Exception {
         //given
         Pattern pattern = Pattern.compile("(^[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*\\.[A-Za-z0-9-_]*$)");
@@ -88,10 +67,54 @@ public class UserApiControllerTest {
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getId()).isGreaterThan(0L);
 
+        assertThat(responseEntity.getBody().getAccessToken()).matches(pattern);
+        assertThat(responseEntity.getBody().getRefreshToken()).matches(pattern);
+    }
+
+    @Test
+    public void User_찾는다() throws Exception {
+        //given
+        String username = "devmin";
+        String password = "123123";
+
+        Long id = userService.save(UserSaveRequestDto.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .build()
+        );
+
+        String url = "http://localhost:" + port + "/api/v1/users/" + id;
+
+        //when
+        ResponseEntity<UserResponseDto> responseEntity = restTemplate.getForEntity(url, UserResponseDto.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(responseEntity.getBody().getId()).isGreaterThan(0L);
         assertThat(responseEntity.getBody().getUsername()).isEqualTo(username);
-        assertThat(responseEntity.getBody().getTokens().get("accessToken")).matches(pattern);
-        assertThat(responseEntity.getBody().getTokens().get("refreshToken")).matches(pattern);
+    }
+
+    @Test
+    public void User_회원가입한다() throws Exception {
+        //given
+        String username = "devmin";
+        String password = "123123";
+        Role role = Role.ADMIN;
+        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
+                .username(username)
+                .password(password)
+                .role(role)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/users";
+
+        //when
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, userSaveRequestDto, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
     }
 }
