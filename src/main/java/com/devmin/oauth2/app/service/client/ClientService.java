@@ -2,18 +2,22 @@ package com.devmin.oauth2.app.service.client;
 
 import com.devmin.oauth2.app.domain.client.Client;
 import com.devmin.oauth2.app.domain.client.ClientRepository;
+import com.devmin.oauth2.app.domain.user.User;
 import com.devmin.oauth2.app.web.dto.client.ClientResponseDto;
 import com.devmin.oauth2.app.web.dto.client.ClientSaveRequestDto;
 import com.devmin.oauth2.app.web.dto.client.ClientSaveResponseDto;
 import com.devmin.oauth2.common.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +25,14 @@ public class ClientService{
     private final ClientRepository clientRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ModelMapper modelMapper;
+
+    public List<ClientResponseDto> findByUsername(User user){
+        List<Client> clientList =  clientRepository.findAllByUser(user);
+        List<ClientResponseDto> ClientResponseDtoList =
+                clientList.stream().map(client -> modelMapper.map(client, ClientResponseDto.class)).collect(Collectors.toList());
+        return ClientResponseDtoList;
+    }
 
     public ClientResponseDto findById(Long id){
         Client client =  clientRepository.findById(id)

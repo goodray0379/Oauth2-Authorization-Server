@@ -1,6 +1,7 @@
 package com.devmin.oauth2.app.domain.client;
 
 import com.devmin.oauth2.app.domain.BaseTimeEntity;
+import com.devmin.oauth2.app.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,10 @@ public class Client extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    private User user;
 
     @Column(length = 50, nullable = false, unique=true)
     private String clientId;
@@ -39,8 +44,9 @@ public class Client extends BaseTimeEntity {
     private String description;
 
     @Builder
-    public Client(Long id, String clientId, String clientSecret, String clientName, String companyName, String webUrl, String callbackUrl, String description) {
+    public Client(Long id, User user, String clientId, String clientSecret, String clientName, String companyName, String webUrl, String callbackUrl, String description) {
         this.id = id;
+        this.user = user;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.clientName = clientName;
