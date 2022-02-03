@@ -1,6 +1,7 @@
 package com.devmin.oauth2.app.web.user;
 
 import com.devmin.oauth2.app.domain.user.Role;
+import com.devmin.oauth2.app.domain.user.User;
 import com.devmin.oauth2.app.domain.user.UserRepository;
 import com.devmin.oauth2.app.service.user.UserService;
 import com.devmin.oauth2.app.web.dto.user.UserLoginRequestDto;
@@ -14,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -40,6 +40,28 @@ public class UserApiControllerTest {
     @After
     public void tearDown() throws Exception {
         userRepository.deleteAll();
+    }
+
+    @Test
+    public void User_회원가입한다() throws Exception {
+        //given
+        String username = "devmin";
+        String password = "123123";
+        Role role = Role.ADMIN;
+        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
+                .username(username)
+                .password(password)
+                .role(role)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/users";
+
+        //when
+        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, userSaveRequestDto, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
     }
 
     @Test
@@ -86,35 +108,25 @@ public class UserApiControllerTest {
 
         String url = "http://localhost:" + port + "/api/v1/users/" + id;
 
+        /*
+        * Header setting
+        */
+        User entity = userRepository.findByUsername(username)
+                .orElseThrow(()-> new IllegalArgumentException("해당 계정이 없습니다. 계정=" + username));
+        UserLoginResponseDto userLoginResponseDto = userService.login(entity);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + userLoginResponseDto.getAccessToken());
+        HttpEntity request = new HttpEntity(headers);
+
         //when
-        ResponseEntity<UserResponseDto> responseEntity = restTemplate.getForEntity(url, UserResponseDto.class);
+        ResponseEntity<UserResponseDto> responseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, request, UserResponseDto.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
         assertThat(responseEntity.getBody().getId()).isGreaterThan(0L);
         assertThat(responseEntity.getBody().getUsername()).isEqualTo(username);
-    }
-
-    @Test
-    public void User_회원가입한다() throws Exception {
-        //given
-        String username = "devmin";
-        String password = "123123";
-        Role role = Role.ADMIN;
-        UserSaveRequestDto userSaveRequestDto = UserSaveRequestDto.builder()
-                .username(username)
-                .password(password)
-                .role(role)
-                .build();
-
-        String url = "http://localhost:" + port + "/api/v1/users";
-
-        //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, userSaveRequestDto, Long.class);
-
-        //then
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
     }
 }

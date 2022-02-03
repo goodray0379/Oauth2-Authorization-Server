@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/v1/clients/**").permitAll()
                 .antMatchers("/api/v1/users").permitAll()
                 .antMatchers("/api/v1/users/login").permitAll()
-                //.antMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()

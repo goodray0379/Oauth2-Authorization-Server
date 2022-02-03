@@ -47,6 +47,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setIssuer(issuer)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + ExpireTime.REFRESH_TOKEN_EXPIRE_TIME.getExpireTime()))
                 .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS512, key)
@@ -56,6 +57,11 @@ public class JwtTokenProvider {
     // 토큰에서 회원 정보 추출
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    // 토큰에서 회원 정보 추출
+    public Long getId(String token) {
+        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("id", Long.class);
     }
 
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "Bearer <Token>"
