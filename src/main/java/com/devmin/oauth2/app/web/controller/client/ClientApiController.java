@@ -24,6 +24,22 @@ public class ClientApiController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @PostMapping()
+    public ClientSaveResponseDto save(@RequestBody ClientSaveRequestDto clientSaveRequestDto
+                                    , @AuthenticationPrincipal User user) {
+        return clientService.save(clientSaveRequestDto, user);
+    }
+
+    @GetMapping("/{id}")
+    public ClientResponseDto findById(@PathVariable Long id){
+        return clientService.findById(id);
+    }
+
+    @GetMapping("/my-clients")
+    public List<ClientResponseDto> findByUser(@AuthenticationPrincipal User user){
+        return clientService.findByUsername(user);
+    }
+
     //    @PostMapping("/users/login")
 //    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto userLoginRequestDto) {
 //        //계정 확인
@@ -36,19 +52,4 @@ public class ClientApiController {
 //        //After To Do: 클라이언트 정보 확인 로직 추가해야함
 //        return userService.createAuthorizationCode(entity, userLoginRequestDto);
 //    }
-
-    @GetMapping("/my-clients")
-    public List<ClientResponseDto> findByUser(@AuthenticationPrincipal User user){
-        return clientService.findByUsername(user);
-    }
-
-    @GetMapping("/{id}")
-    public ClientResponseDto findById(@PathVariable Long id){
-        return clientService.findById(id);
-    }
-
-    @PostMapping("")
-    public ClientSaveResponseDto save(@RequestBody ClientSaveRequestDto clientSaveRequestDto) {
-        return clientService.save(clientSaveRequestDto);
-    }
 }

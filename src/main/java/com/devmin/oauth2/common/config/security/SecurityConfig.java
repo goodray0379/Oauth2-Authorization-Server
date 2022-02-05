@@ -33,11 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 요청에 대한 사용권한 체크(접두사 ROLE_ 자동추가)
                 .authorizeRequests()
-                .antMatchers("/api/v1/clients").permitAll()
-                .antMatchers("/api/v1/clients/**").permitAll()
                 .antMatchers("/api/v1/users").permitAll()
                 .antMatchers("/api/v1/users/login").permitAll()
                 .antMatchers("/api/v1/users/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/v1/clients/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
                 .anyRequest().permitAll() // 그외 나머지 요청은 누구나 접근 가능
                 .and()

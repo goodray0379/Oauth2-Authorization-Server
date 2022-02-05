@@ -1,5 +1,7 @@
 package com.devmin.oauth2.app.web.dto.client;
+
 import com.devmin.oauth2.app.domain.client.Client;
+import com.devmin.oauth2.app.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +17,7 @@ public class ClientSaveRequestDto {
     private String webUrl;
     private String callbackUrl;
     private String description;
+    private String user_id;
 
     @Builder
     public ClientSaveRequestDto(String clientName, String companyName, String webUrl, String callbackUrl, String description) {
@@ -34,6 +37,19 @@ public class ClientSaveRequestDto {
                 .description(description)
                 .clientId(clientInfos.get("clientId"))
                 .clientSecret(clientInfos.get("clientSecret"))
+                .build();
+    }
+
+    public Client toEntity(Map<String, String> clientInfos, User user) {
+        return Client.builder()
+                .clientName(clientName)
+                .companyName(companyName)
+                .webUrl(webUrl)
+                .callbackUrl(callbackUrl)
+                .description(description)
+                .clientId(clientInfos.get("clientId"))
+                .clientSecret(clientInfos.get("clientSecret"))
+                .user(user)
                 .build();
     }
 }

@@ -18,10 +18,6 @@ public class Client extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
-    private User user;
-
     @Column(length = 50, nullable = false, unique=true)
     private String clientId;
 
@@ -43,10 +39,13 @@ public class Client extends BaseTimeEntity {
     @Column(length = 2000)
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable=false)
+    private User user;
+
     @Builder
-    public Client(Long id, User user, String clientId, String clientSecret, String clientName, String companyName, String webUrl, String callbackUrl, String description) {
+    public Client(Long id, String clientId, String clientSecret, String clientName, String companyName, String webUrl, String callbackUrl, String description, User user) {
         this.id = id;
-        this.user = user;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.clientName = clientName;
@@ -54,5 +53,6 @@ public class Client extends BaseTimeEntity {
         this.webUrl = webUrl;
         this.callbackUrl = callbackUrl;
         this.description = description;
+        this.user = user;
     }
 }
