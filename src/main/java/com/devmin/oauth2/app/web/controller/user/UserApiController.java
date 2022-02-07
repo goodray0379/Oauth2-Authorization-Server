@@ -21,6 +21,17 @@ public class UserApiController {
     private final PasswordEncoder passwordEncoder;
 
     /*
+     * 회원정보 저장
+     * @return 유저아이디
+     * @author devmin
+     */
+    @PostMapping
+    public Long save(@RequestBody UserSaveRequestDto userSaveRequestDto) {
+        userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
+        return userService.save(userSaveRequestDto);
+    }
+
+    /*
      * 로그인
      * @return 토큰값
      * @author devmin
@@ -45,16 +56,5 @@ public class UserApiController {
     @GetMapping("/{id}")
     public UserResponseDto findById(@PathVariable Long id){
         return userService.findById(id);
-    }
-
-    /*
-     * 회원정보 저장
-     * @return 유저아이디
-     * @author devmin
-     */
-    @PostMapping("")
-    public Long save(@RequestBody UserSaveRequestDto userSaveRequestDto) {
-        userSaveRequestDto.encryptPassword(passwordEncoder.encode(userSaveRequestDto.getPassword()));
-        return userService.save(userSaveRequestDto);
     }
 }

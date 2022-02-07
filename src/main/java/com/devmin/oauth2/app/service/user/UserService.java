@@ -22,7 +22,13 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Transactional
+    public Long save(UserSaveRequestDto userSaveRequestDto){
+        return userRepository.save( userSaveRequestDto.toEntity() ).getId();
+    }
+
     public UserLoginResponseDto login(User entity){
+        //TO DO: 로그테이블 insert
         return new UserLoginResponseDto(jwtTokenProvider.createAccessToken(entity), jwtTokenProvider.createRefreshToken(entity));
     }
 
@@ -42,10 +48,5 @@ public class UserService implements UserDetailsService {
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
         userRepository.findAll().forEach( user -> userResponseDtos.add( new UserResponseDto(user) ) );
         return userResponseDtos;
-    }
-
-    @Transactional
-    public Long save(UserSaveRequestDto userSaveRequestDto){
-        return userRepository.save( userSaveRequestDto.toEntity() ).getId();
     }
 }
