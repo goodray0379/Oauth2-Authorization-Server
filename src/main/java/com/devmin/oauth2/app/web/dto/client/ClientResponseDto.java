@@ -1,7 +1,6 @@
 package com.devmin.oauth2.app.web.dto.client;
 
 import com.devmin.oauth2.app.domain.client.Client;
-import com.devmin.oauth2.app.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +14,6 @@ public class ClientResponseDto {
     private String webUrl;
     private String callbackUrl;
     private String description;
-    private User user;
 
     public ClientResponseDto(Client entity) {
         this.id = entity.getId();
@@ -25,6 +23,5 @@ public class ClientResponseDto {
         this.webUrl = entity.getWebUrl();
         this.callbackUrl = entity.getCallbackUrl();
         this.description = entity.getDescription();
-        this.user = entity.getUser();
     }
 }

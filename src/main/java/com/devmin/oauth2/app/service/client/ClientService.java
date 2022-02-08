@@ -23,9 +23,9 @@ import java.util.stream.Collectors;
 @Service
 public class ClientService{
     private final ClientRepository clientRepository;
+    private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
-    private final ModelMapper modelMapper;
 
     @Transactional
     public ClientSaveResponseDto save(ClientSaveRequestDto clientSaveRequestDto, User user){
@@ -38,6 +38,12 @@ public class ClientService{
         return new ClientSaveResponseDto(clientRepository.save( entity ));
     }
 
+    public ClientResponseDto findById(Long id){
+        Client client =  clientRepository.findById(id)
+                .orElseThrow(()-> new IllegalArgumentException("해당 클라이언트가 없습니다. id=" + id));
+        return new ClientResponseDto(client);
+    }
+
     public List<ClientResponseDto> findByUsername(User user){
         List<Client> clientList =  clientRepository.findAllByUser(user);
         List<ClientResponseDto> ClientResponseDtoList =
@@ -45,21 +51,7 @@ public class ClientService{
         return ClientResponseDtoList;
     }
 
-    public ClientResponseDto findById(Long id){
-        Client client =  clientRepository.findById(id)
-                .orElseThrow(()-> new IllegalArgumentException("해당 클라이언트가 없습니다. id=" + id));
-        return new ClientResponseDto(client);
-    }
-
-    public String createClientId(){
-        return UUID.randomUUID().toString().replace("-", "");
-    }
-
-    public String createClientSecret(){
-        return UUID.randomUUID().toString().split("-")[0];
-    }
-
-    //    public UserLoginResponseDto login(User entity, UserLoginRequestDto userLoginRequestDto){
+//    public UserLoginResponseDto login(User entity, UserLoginRequestDto userLoginRequestDto){
 //        String authorizationCode = UUID.randomUUID().toString();
 //        //After To Do: 인증코드 저장 로직 추가해야함
 //        return new UserLoginResponseDto(authorizationCode, userLoginRequestDto.getState());
@@ -74,4 +66,12 @@ public class ClientService{
 //        entity.updateRefreshToken(tokens.get("refreshToken"));
 //        return new UserLoginResponseDto(entity, tokens);
 //    }
+
+    public String createClientId(){
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+    public String createClientSecret(){
+        return UUID.randomUUID().toString().split("-")[0];
+    }
 }

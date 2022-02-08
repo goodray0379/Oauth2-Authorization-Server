@@ -24,7 +24,7 @@ public class ClientApiController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping()
+    @PostMapping
     public ClientSaveResponseDto save(@RequestBody ClientSaveRequestDto clientSaveRequestDto
                                     , @AuthenticationPrincipal User user) {
         return clientService.save(clientSaveRequestDto, user);

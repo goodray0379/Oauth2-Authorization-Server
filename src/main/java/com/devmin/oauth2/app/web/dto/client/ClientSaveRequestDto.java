@@ -17,7 +17,6 @@ public class ClientSaveRequestDto {
     private String webUrl;
     private String callbackUrl;
     private String description;
-    private String user_id;
 
     @Builder
     public ClientSaveRequestDto(String clientName, String companyName, String webUrl, String callbackUrl, String description) {
@@ -26,18 +25,6 @@ public class ClientSaveRequestDto {
         this.webUrl = webUrl;
         this.callbackUrl = callbackUrl;
         this.description = description;
-    }
-
-    public Client toEntity(Map<String, String> clientInfos) {
-        return Client.builder()
-                .clientName(clientName)
-                .companyName(companyName)
-                .webUrl(webUrl)
-                .callbackUrl(callbackUrl)
-                .description(description)
-                .clientId(clientInfos.get("clientId"))
-                .clientSecret(clientInfos.get("clientSecret"))
-                .build();
     }
 
     public Client toEntity(Map<String, String> clientInfos, User user) {
