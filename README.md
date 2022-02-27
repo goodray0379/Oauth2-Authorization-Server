@@ -120,26 +120,26 @@ OAuth는 인터넷 사용자들이 비밀번호를 제공하지 않고 다른 �
 ## What is JWT ?
 인터넷 표준 인증 방식 중 하나로 JWT를 많이 사용하기에 Access Token과 Refresh Token를 JWT를 이용하여 구현하는 것을 채택하였다. 따라서, JWT의 개념을 잠깐 짚고 넘어간다.
 
+<img src="img/jwt_io.png" width="60%" height="60%" title="jwt" alt="jwt"></img>
+<br>
 JWT(Json Web Token)란 Json 포맷을 이용하여 사용자에 대한 속성을 저장하는 Claim 기반의 Web Token이다. JWT는 토큰 자체를 정보로 사용하는 Self-Contained 방식으로 정보를 안전하게 전달한다. 주로 회원 인증이나 정보 전달에 사용되는 JWT는 아래의 로직을 따라서 처리된다.
 
 <br>
 
-####JWT 구조
-<img src="img/jwt_io.png" width="60%" height="60%" title="jwt" alt="jwt"></img>
-<br>
+#### JWT 구조
 JWT는 Header, Payload, Signature의 3 부분으로 이루어지며, Json 형태인 각 부분은 Base64로 인코딩 되어 표현된다. 또한 각각의 부분을 이어 주기 위해 . 구분자를 사용하여 구분한다. 추가로 Base64는 암호화된 문자열이 아니고, 같은 문자열에 대해 항상 같은 인코딩 문자열을 반환한다.
 [참고사이트](https://jwt.io/)
 
 <br>
 
-######1. Header(헤더)
+###### 1. Header(헤더)
 Header에는 보통 토큰의 타입이나, 서명 생성에 어떤 알고리즘이 사용되었는지 저장한다.
 토큰의 헤더는 typ과 alg 두 가지 정보로 구성된다. alg는 헤더(Header)를 암호화 하는 것이 아니고, Signature를 해싱하기 위한 알고리즘을 지정하는 것이다.
 
 - typ: 토큰의 타입을 지정 ex) JWT
 - alg: 알고리즘 방식을 지정하며, 서명(Signature) 및 토큰 검증에 사용 ex) HS256(SHA256) 또는 RSA
 
-######2. PayLoad(페이로드)
+###### 2. PayLoad(페이로드)
 Payload에는 보통 Claim이라는 사용자에 대한, 혹은 토큰에 대한 property를 key-value의 형태로 저장한다.
 등록된 클레임은 토큰 정보를 표현하기 위해 이미 정해진 종류의 데이터들로, 모두 선택적으로 작성이 가능하며 사용할 것을 권장한다. 또한 JWT를 간결하게 하기 위해 key는 모두 길이 3의 String이다. 여기서 subject로는 unique한 값을 사용하는데, 사용자 이메일을 주로 사용한다.
 
@@ -153,7 +153,7 @@ Payload에는 보통 Claim이라는 사용자에 대한, 혹은 토큰에 대한
 
 표준 스펙 외에도 필요하다 싶으면 추가해도 무방하다. 다만 중요한 것은 payload에는 개인정보 등 민감한 정보를 담지 않는 것이다.
 
-######3. Signature(서명)
+###### 3. Signature(서명)
 서명(Signature)은 토큰을 인코딩하거나 유효성 검증을 할 때 사용하는 고유한 암호화 코드이다. 서명(Signature)은 위에서 만든 헤더(Header)와 페이로드(Payload)의 값을 각각 BASE64로 인코딩하고, 인코딩한 값을 비밀 키를 이용해 헤더(Header)에서 정의한 알고리즘으로 해싱을 하고, 이 값을 다시 BASE64로 인코딩하여 생성한다.
 <br>
 <br>
